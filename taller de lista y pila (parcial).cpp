@@ -218,13 +218,15 @@ int cambiarnum(listad milistad, int numbuscar, int cambiado){
 /////////////////////////////////////////////////////////////////////////////////////
 //funcion para saber si un numero empieza en 4
 int empieza4(listad milistad){
+
 	while(milistad!=NULL){
-		while(milistad->valor/10!=0){
-			
-			milistad->valor=milistad->valor/10;
+		int valor1=milistad->valor;
+		int valor=valor1;
+		while(valor/10!=0){
+			valor=valor/10;
 		}
-		if(milistad->valor%10==4){
-			return milistad->valor;
+		if(valor%10==4){
+			return valor1;				  
 		}
 	milistad=milistad->siguiente;
 	}
@@ -232,42 +234,6 @@ int empieza4(listad milistad){
 
 //////////////////////////////////////////////////////////////////////////////////////
 //funcion para eliminar numeros de la lista que inicien en 4
-void eliminar4(listad *milistad){
-	listad aux_borrar;
-	listad anterior=NULL;
-	listad primero=*milistad;
-	listad actual=primero;
-	listad ultimo;
-	int encontrado=0;
-
-	if(primero!=NULL){
-		while(actual!=NULL &&encontrado!=1){
-			if(empieza4(*milistad)==actual->valor){
-				if(actual==primero){
-					primero=primero->siguiente;
-					primero->anterior=NULL;
-				}else if(actual==ultimo){
-					anterior->siguiente=NULL;
-					ultimo=anterior;
-				}else{
-					anterior->siguiente=actual->siguiente;
-					actual->siguiente->anterior=anterior;
-				}
-				printf("nodo eliminado:");
-				encontrado=1;
-			}
-			anterior=actual;
-			actual=actual->siguiente;
-		}
-		if(encontrado==0){
-			printf("no hay numeros que inicien en 4");
-		}else{
-			free(anterior);
-		}
-	}else{
-		printf("lista vacia");
-	}
-}
     
 //////////////////////////////////////////////////////////////////////////////////////
 //funcion para crear nodos de lista doble
@@ -452,7 +418,7 @@ int main(){
 									
 							break;
 							case 4: system("cls");
-									eliminar4(&milistad);
+									empieza4(milistad);
 
 							break;
 						}
