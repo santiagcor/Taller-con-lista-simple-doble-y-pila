@@ -47,7 +47,7 @@ printf("%s","BIENVENIDO AL MUNDO DE LAS listas simples\n");
 printf("%s","1. Insertar estudiantes\n");
 printf("%s","2. Buscar estudiantes por cedula\n");
 printf("%s","3.  MOSTRAR estudiantes\n");
-printf("%s","5. Salir al menu principal ");
+printf("%s","4. Salir al menu principal ");
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -103,10 +103,11 @@ void buscarEnL(Lista milista,int cedula){
 				printf("***********************");
 				printf ("\n");
 				break;
-			}else{
-				printf("no existe el estudiante");
 			}
 		milista=milista->siguiente;
+		}
+		if(milista==NULL){
+			printf("no se encontro el estudiante...");
 		}
 	}
 }
@@ -202,11 +203,11 @@ void mostrarld(listad milistad){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-//funcion para editarn nodo de la lista doble
+//funcion para editar nodo de la lista doble
 int cambiarnum(listad milistad, int numbuscar, int cambiado){
 	int numcambiado=0;
 		while(milistad!=NULL){
-			if(milistad->valor==numbuscar && terminaen7(cambiado)==0 && cambiado>=0 && primo(cambiado)==0){
+			if(comprobarnum(milistad,numbuscar)==1 && terminaen7(cambiado)==0 && cambiado>=0 && primo(cambiado)==0){
 				milistad->valor=cambiado;
 				numcambiado=1;
 				return numcambiado;
@@ -234,7 +235,42 @@ int empieza4(listad milistad){
 
 //////////////////////////////////////////////////////////////////////////////////////
 //funcion para eliminar numeros de la lista que inicien en 4
-    
+void eliminar4(listad *milistad){
+	listad aux_borrar;
+	listad anterior=NULL;
+	listad primero=*milistad;
+	listad actual=primero;
+	listad ultimo;
+	int encontrado=0;
+
+	if(primero!=NULL){
+		while(actual!=NULL &&encontrado!=1){
+			if(actual->valor == empieza4(*milistad)){
+				if(actual==primero){
+					primero=primero->siguiente;
+					primero->anterior=NULL;
+				}else if(actual==ultimo){
+					anterior->siguiente=NULL;
+					ultimo=anterior;
+				}else{
+					anterior->siguiente=actual->siguiente;
+					actual->siguiente->anterior=anterior;
+				}
+				printf("nodo eliminado:");
+				encontrado=1;
+			}
+			anterior=actual;
+			actual=actual->siguiente;
+		}
+		if(encontrado==0){
+			printf("no hay numeros que inicien en 4");
+		}else{
+			free(anterior);
+		}
+	}else{
+		printf("lista vacia");
+	}
+}    
 //////////////////////////////////////////////////////////////////////////////////////
 //funcion para crear nodos de lista doble
 void insertarLD(listad *milistad, int valor){
@@ -316,7 +352,7 @@ int main(){
 					printf("\nescoja una opcion: ");
 					printf ("\n");
 					scanf("%d",&opc2);
-					while(opc2!=5){	
+					while(opc2!=4){	
 						system("cls");
 						switch(opc2){
 						case 1: system("cls");
@@ -343,7 +379,7 @@ int main(){
 									}else{
 										printf("el estudiante ya existe");
 									}
-										printf("%s \n","*********************************");
+										printf("%s \n","\n*********************************");
 										printf("Ingrese mas datos,  recuerde que con -1 termina: \n");
        					 				printf("Ingrese la cedula: ");
 										scanf("%d",&valor_cedula);
@@ -361,15 +397,11 @@ int main(){
 						case 3: system("cls");
 								mostrarEst(milista);
 						break;
-						
-						case 4: system("cls");
-						
-						break;
 						}	
 						printf("\n");
-		  				printf("ingrese el numero 5 para volver al menu de lista simple: ");
+		  				printf("ingrese el numero 4 para volver al menu de lista simple: ");
   						scanf("%d",&opc2); 
-						  if(opc2==5){
+						  if(opc2==4){
 							system("cls");
 							menu2();
 							printf("\nescoja una opcion: ");
@@ -418,7 +450,7 @@ int main(){
 									
 							break;
 							case 4: system("cls");
-									empieza4(milistad);
+									eliminar4(&milistad);
 
 							break;
 						}
