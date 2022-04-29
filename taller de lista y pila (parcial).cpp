@@ -204,10 +204,10 @@ void mostrarld(listad milistad){
 
 //////////////////////////////////////////////////////////////////////////////////////
 //funcion para editar nodo de la lista doble
-int cambiarnum(listad milistad, int numbuscar, int cambiado){
+int cambiarnum(listad milistad, int cambiado){
 	int numcambiado=0;
 		while(milistad!=NULL){
-			if(comprobarnum(milistad,numbuscar)==1 && terminaen7(cambiado)==0 && cambiado>=0 && primo(cambiado)==0){
+			if(comprobarnum(milistad,cambiado)==0 && terminaen7(cambiado)==0 && cambiado>=0 && primo(cambiado)==0){
 				milistad->valor=cambiado;
 				numcambiado=1;
 				return numcambiado;
@@ -439,13 +439,18 @@ int main(){
 							case 3: system("cls");
 									printf("ingrese el numero a cambiar: ");
 									scanf("%d",&numcambiar);
-									printf("por cual numero desea cambiarlo ");
-									scanf("%d",&numcambiado	);
-									if(cambiarnum(milistad,numcambiar,numcambiado)==1){
+									if(comprobarnum(milistad, numcambiar)==1){
+										printf("por cual numero desea cambiarlo ");
+										scanf("%d",&numcambiado	);
+									}else{
+										printf("el numero que quiere cambiar no existe");
+									}
+									if(cambiarnum(milistad,numcambiado)==1){
 										printf("el numero ha sido cambiado");
 									}else{
-										printf("el numero no ha sido cambiado");
+										printf("el numero no se puede cambiar");
 									}
+									
 									
 									
 							break;
