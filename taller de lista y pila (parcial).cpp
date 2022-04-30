@@ -34,11 +34,9 @@ typedef nododoble *listad;
 void menu4(){
 printf("%s","BIENVENIDO AL MUNDO DE LAS PILAS\n");
 printf("%s","1. PUSH\n");
-printf("%s","2. POP\n");
-printf("%s","3.  MOSTRAR PILA\n");
-printf("%s","4. MOSTRAR EL NUMERO DISPONIBLE EN EL TOPE DE LA PILA\n");
-printf("%s","5. Mostrar numeros amigos");
-printf("%s","8. SALIR: ");
+printf("%s","2.  MOSTRAR PILA\n");
+printf("%s","4. Salir al menu principal\n");
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -290,16 +288,7 @@ void insertarLD(listad *milistad, int valor){
 
 }
 
-//funciones pilas////////////////
-////////////////////Funci�n push///////////////////
-void Push(Pila *Pilainicial, int valor){
-    Pila nuevo_nodo; 
-    nuevo_nodo = (Pila)malloc(sizeof(nodoP)); 
-    nuevo_nodo->num = valor; 
-    nuevo_nodo->siguiente = *Pilainicial; 
-    *Pilainicial = nuevo_nodo; 
-}
-
+///////////////////funciones pilas////////////////
 //////////////////////////////stackempty: verifica si la pila est� vacia//////////////
 int stackempty(Pila Pilainicial){
 int vacia=0; // vacia es 0 la pila est� vacia, si es 1 la pila tiene elementos
@@ -312,27 +301,88 @@ else
  return vacia;
  }
 }
+////////////////////////////////////////////////////
+//funcion para determinar si un numero tiene 3 digitos
+int contardigitos(int valor){
+	int contar=0;
+	while(valor!=0){
+		valor=valor/10;
+		contar++;
+	}
+	if(contar==3){
+		return 1;
+	}
+ return 0;
+}
+////////////////////////////////////////////////////
+//funcion para determinar si la suma de los digitos de un numero inicia en 4
+int suma4(int valor){
+	int sumadigitos=0;
+	int auxnum;
+	while(valor!=0){
+		auxnum=valor%10;
+		valor=valor/10;
+		sumadigitos=sumadigitos+auxnum;
+	}
+	while(sumadigitos/10!=0){
+		sumadigitos=sumadigitos/10;
+	}
+	if(sumadigitos%10==4){
+			return 1;
+	}
+	return 0;
+}
+//funcion para saber si ya hay un numero igual en la pila
+int comprobarpil(Pila Pilainicial,int valor){
+	while(Pilainicial!=NULL){
+		if(Pilainicial->num==valor){
+			return 1;
+		}
+		Pilainicial=Pilainicial->siguiente;
+	}
+	return 0;
+}
+
+////////////////////Funci�n push///////////////////
+void Push(Pila *Pilainicial, int valor){
+	if(comprobarpil(*Pilainicial,valor)==0 && contardigitos(valor)==0 && suma4(valor)==0 && valor>=0){
+		Pila nuevo_nodo;
+		nuevo_nodo = (Pila)malloc(sizeof(nodoP)); 
+		nuevo_nodo->num = valor; 
+		nuevo_nodo->siguiente = *Pilainicial; 
+		*Pilainicial = nuevo_nodo; 
+	}else{
+		printf("no se puede ingresar el numero");
+	}
+}
 /////////////////////stacktop(S): determina cual es el elemento disponible de la pila///
 int stacktop(Pila Pilainicial){
     return Pilainicial->num;
 }
 //////////////////////////////////////////mostrar pila/////////////////////////////////
- void mostrar_pila(Pila Pilainicial){
-    while(Pilainicial != NULL){ 
-        printf("%d",Pilainicial->num); 
-        printf("%s","\n");
-		Pilainicial = Pilainicial->siguiente; 
-    }
+//funcion para mostrar la lista doble
+void mostrarpila(Pila Pilainicial){
+	if(Pilainicial==NULL){
+		printf("Pila vacia");
+	}else{
+		while(Pilainicial!=NULL){
+				printf("%d",Pilainicial->num);
+				printf ("\n");
+				printf("***********************");
+				printf ("\n");	
+		Pilainicial=Pilainicial->siguiente;
+		}
+	}
 }
 
+//main
 ///////////////////////////////////////////////////////////////////////////////
 int main(){
 	Pila mipila;
 	mipila=NULL;
-	int opc=0,opc2=0,opc3=0,valor_cedula,cedbus,num,numcambiar,numcambiado;
+	int opc=0,opc2=0,opc3=0,opc4=0,edad,valor_cedula,cedbus,num,numcambiar,numcambiado,pilita;
 	char aux_nombres[20];
 	float promedio;
-	int edad;
 	Lista milista;
 	milista=NULL;
 	listad milistad;
@@ -473,6 +523,39 @@ int main(){
 			break;
 			case 3: system("cls");
 					menu4();
+					printf("escoja una opcion: ");
+					scanf("%d",&opc4);
+					while(opc4!=4){
+						switch(opc4){
+							case 1: system("cls");
+									printf("Ingrese numeros a la pila, presione -1 para terminar: \n");
+									printf("Ingrese un numero: ");
+									scanf("%d",&pilita);
+									printf ("\n");
+									while(pilita!=-1){
+										Push(&mipila,pilita);
+										printf ("\n");
+										printf("Ingrese mas datos,  recuerde que con -1 termina: \n");
+										printf("Ingrese un numero ");
+										scanf("%d",&pilita);
+									} 
+							break;
+							case 2: system("cls");
+									mostrarpila(mipila);
+							break;
+						}
+						printf("\n");
+		  				printf("ingrese el numero 4 para volver al menu de pilas ");
+  						scanf("%d",&opc4); 
+						  if(opc4==4){
+							system("cls");
+							menu4();
+							printf("\nescoja una opcion: ");
+							printf ("\n");
+							scanf("%d",&opc4);
+						  }
+					}
+					
 			break;
 			case 4: system("cls");
 					return 0;
