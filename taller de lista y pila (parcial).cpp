@@ -13,7 +13,7 @@ typedef nodoP *Pila;
 
 typedef struct nodo_estudiante{
 	int cedula;
-	char nombre[20];
+	char nombre[30];
 	float promedio;
 	int edad;
 	struct nodo_estudiante *siguiente; 
@@ -45,7 +45,8 @@ printf("%s","BIENVENIDO AL MUNDO DE LAS listas simples\n");
 printf("%s","1. Insertar estudiantes\n");
 printf("%s","2. Buscar estudiantes por cedula\n");
 printf("%s","3.  MOSTRAR estudiantes\n");
-printf("%s","4. Salir al menu principal ");
+printf("%s","4.  Eliminar un estudiante por cedula\n");
+printf("%s","5. Salir al menu principal ");
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,6 +79,17 @@ int comprobarEst(Lista milista,int cedula){
 	}
 	return 0;
 }
+//funcion para retornar cedula, para eliminarla despues	
+int comprobarEstpc(Lista milista,int cedula){
+	while(milista!=NULL){
+		if(milista->cedula==cedula){
+			return milista->cedula;
+		}
+		milista=milista->siguiente;
+	}
+	return 0;
+}
+
 //funcion para buscar cedula en la lista
 //////////////////////////////////////////////////////////////////////////////////////
 void buscarEnL(Lista milista,int cedula){
@@ -119,7 +131,7 @@ void mostrarEst(Lista milista){
 				printf("%s","Cedula: ");
 				printf("%d",milista->cedula);
 				printf ("\n");
-				printf("%s","Nombres: ");
+				printf("Nombres: ");
 				printf("%s",milista->nombre);
 				printf ("\n");
 				printf("%s","promedio: ");
@@ -134,7 +146,7 @@ void mostrarEst(Lista milista){
 		}
 	}
 }
-//////////////////////////////////////////////////////////////////////////////////////
+////////////////4//////////////////////////////////////////////////////////////////////
 //funcion para insertar estudiantes a la lista simple
 void insertarE(Lista *milista, int cedula, char *nombre,float promedio,int edad){
 		Lista nuevo_nodo;
@@ -145,6 +157,43 @@ void insertarE(Lista *milista, int cedula, char *nombre,float promedio,int edad)
 		strcpy(nuevo_nodo->nombre,nombre);
 		nuevo_nodo->siguiente=*milista;
 		*milista=nuevo_nodo;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//funcion para eliminar estudiante por cedula de la lista simple
+void eliminarest(Lista *milista,int cedula){
+	Lista anterior=NULL;
+	Lista primero=*milista;
+	Lista actual=primero;
+	Lista ultimo;
+	int encontrado=0;
+
+	if(primero!=NULL){
+		while(actual!=NULL &&encontrado!=1){
+			if(actual->cedula == comprobarEstpc(*milista, cedula)){
+				if(actual==primero){
+					primero=primero->siguiente;
+				}else if(actual==ultimo){
+					anterior->siguiente=NULL;
+					ultimo=anterior;
+				}else{
+					anterior->siguiente=actual->siguiente;
+					}
+				printf("estudiante eliminado:");
+				encontrado=1;
+			}
+			anterior=actual;
+			actual=actual->siguiente;
+		}
+		if(encontrado==0){
+			printf("la cedula no existe");
+		}else{
+			free(anterior);
+		}
+	}else{
+		printf("lista vacia");
+	}
+	
 }
 //////////////////////////////////////////////////////////////////////////////////////
 //funciones lista doble////
@@ -229,6 +278,7 @@ int empieza4(listad milistad){
 		}
 	milistad=milistad->siguiente;
 	}
+	return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -380,8 +430,8 @@ void mostrarpila(Pila Pilainicial){
 int main(){
 	Pila mipila;
 	mipila=NULL;
-	int opc=0,opc2=0,opc3=0,opc4=0,edad,valor_cedula,cedbus,num,numcambiar,numcambiado,pilita;
-	char aux_nombres[20];
+	int opc=0,opc2=0,opc3=0,opc4=0,edad,valor_cedula,cedbus,cedbus2,num,numcambiar,numcambiado,pilita;
+	char aux_nombres[30];
 	float promedio;
 	Lista milista;
 	milista=NULL;
@@ -402,7 +452,7 @@ int main(){
 					printf("\nescoja una opcion: ");
 					printf ("\n");
 					scanf("%d",&opc2);
-					while(opc2!=4){	
+					while(opc2!=5){	
 						system("cls");
 						switch(opc2){
 						case 1: system("cls");
@@ -414,7 +464,9 @@ int main(){
 									if(comprobarEst(milista,valor_cedula)==0){
 										printf("ingrese nombre: ");
 										printf ("\n");
-										scanf("%s",&aux_nombres);
+										fflush(stdin);
+										scanf("%[^\n]",&aux_nombres);
+										fflush(stdin);
 										printf("ingrese promedio: ");
 										printf ("\n");
 										scanf("%f",&promedio);
@@ -447,11 +499,21 @@ int main(){
 						case 3: system("cls");
 								mostrarEst(milista);
 						break;
+						case 4: system("cls");
+								printf("ingrese cedula a buscar: ");
+								printf("\n");
+								scanf("%d",&cedbus2);
+								if(comprobarEst(milista,cedbus2)==1){
+									eliminarest(&milista,cedbus2);
+								}else{
+									printf("el estudiante no existe");
+								}	
+						break;
 						}	
 						printf("\n");
-		  				printf("ingrese el numero 4 para volver al menu de lista simple: ");
+		  				printf("ingrese el numero 5 para volver al menu de lista simple: ");
   						scanf("%d",&opc2); 
-						  if(opc2==4){
+						  if(opc2==5){
 							system("cls");
 							menu2();
 							printf("\nescoja una opcion: ");
@@ -500,9 +562,7 @@ int main(){
 									}else{
 										printf("el numero no se puede cambiar");
 									}
-									
-									
-									
+										
 							break;
 							case 4: system("cls");
 									eliminar4(&milistad);
